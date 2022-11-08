@@ -7,7 +7,7 @@ let getAllNguoiDungs = async (req, res) => {
 
     const rows = await pool.request().query(sqlString)
     return res.status(200).json({
-        massage: 'ok',
+        massage: 'Lấy thông tin tất cả người dùng thành công',
         data: rows.recordset
     })
 }
@@ -20,13 +20,13 @@ let getOneNguoiDung = async (req, res) => {
     const rows = await pool.request().query(sqlString)
     if (rows.recordset.length > 0) {
         return res.status(200).json({
-            massage: 'get user ok',
+            massage: 'Lấy thông tin một người dùng thành công',
             data: rows.recordset[0]
         })
     }
     else {
         return res.status(200).json({
-            massage: 'unknown user',
+            massage: 'Không có thông tin người dùng cần lấy',
             data: null
         })
     }
@@ -45,7 +45,7 @@ let createNewNguoiDung = async (req, res) => {
         .input('Image', sql.NVarChar, req.body.Image)
         .query(sqlString)
     return res.status(200).json({
-        message: 'create new user ok',
+        message: 'Tạo một người dùng thành công',
     })
 }
 
@@ -63,7 +63,7 @@ let updateNguoiDung = async (req, res) => {
         .input('ID', sql.Int, req.body.ID)
         .query(sqlString)
     return res.status(200).json({
-        message: 'update user ok',
+        message: 'Sửa thông tin người dùng thành công',
     })
 }
 
@@ -74,13 +74,10 @@ let deleteNguoiDung = async (req, res) => {
 
     const rows = await pool.request().query(sqlString)
     return res.status(200).json({
-        massage: 'delete user ok',
-        data: rows.recordset
+        massage: 'Xóa thông tin người dùng thành công',
     })
 
 }
-
-
 
 module.exports = {
     getAllNguoiDungs: getAllNguoiDungs,
