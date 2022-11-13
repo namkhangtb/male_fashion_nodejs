@@ -8,6 +8,7 @@ var APIHoaDonController = require('../controller/APIHoaDonController')
 var APIChiTietHoaDonController = require('../controller/APIChiTietHoaDon')
 var APITinTucController = require('../controller/APITinTucController')
 var APILienHeController = require('../controller/APILienHeController')
+var APISanPhamController = require('../controller/APISanPhamController')
 
 let router = express.Router();
 var { conn, config } = require('../configs/connectDB')
@@ -31,6 +32,13 @@ const initAPIRoute = (app) => {
     router.post('/create-product-type', APILoaiSanPhamController.createNewLoaiSanPham);
     router.put('/update-product-type', APILoaiSanPhamController.updateLoaiSanPham);
     router.delete('/delete-product-type/:id', APILoaiSanPhamController.deleteLoaiSanPham);
+
+    // San Pham
+    router.get('/product', APISanPhamController.getAllSanPhams);
+    router.get('/product/:id', APISanPhamController.getOneSanPham);
+    router.post('/create-product', APISanPhamController.createNewSanPham);
+    router.put('/update-product', APISanPhamController.updateSanPham);
+    router.delete('/delete-product/:id', APISanPhamController.deleteSanPham);
 
     //Chi Tiet San Pham 
     router.get('/product-details', APIChiTietSanPhamController.getAllChiTietSanPhams);
