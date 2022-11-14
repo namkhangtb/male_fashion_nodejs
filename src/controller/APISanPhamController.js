@@ -1,6 +1,25 @@
 var { conn, config } = require('../configs/connectDB')
 var sql = require('mssql/msnodesqlv8')
 
+let getListSanPhamByIDLoaiSanPham = async (req, res) => {
+    var pool = await sql.connect(config);
+    var id = req.params.id;
+    var sqlString = "select * from SanPham where IDLoaiSanPham  = " + id;
+
+    const rows = await pool.request().query(sqlString)
+    if (rows.recordset.length > 0) {
+        return res.status(200).json({
+            massage: 'Lấy thông tin danh sách sản phẩm có IDLoaiSanPham = ' + id + ' thành công',
+            data: rows.recordset
+        })
+    }
+    else {
+        return res.status(200).json({
+            massage: 'Không có thông tin danh sách sản phẩm có IDLoaiSanPham = ' + id + ' cần lấy',
+            data: null
+        })
+    }
+}
 
 let getAllSanPhams = async (req, res) => {
     var pool = await sql.connect(config);
@@ -93,4 +112,5 @@ module.exports = {
     createNewSanPham: createNewSanPham,
     updateSanPham: updateSanPham,
     deleteSanPham: deleteSanPham,
+    getListSanPhamByIDLoaiSanPham: getListSanPhamByIDLoaiSanPham,
 }
