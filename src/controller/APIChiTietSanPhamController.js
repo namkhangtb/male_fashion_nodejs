@@ -127,8 +127,29 @@ let getChiTietSanPhamByConditionID_MS_KC_SL = async (req, res) => {
         .query(sqlString)
     if (rows.recordset.length > 0) {
         return res.status(200).json({
-            massage: 'Lấy thông tin chi tiết sản phẩm đạt đủ điều thành công',
+            massage: 'Lấy thông tin chi tiết sản phẩm đạt đủ điều kiện thành công',
             data: rows.recordset[0]
+        })
+    }
+    else {
+        return res.status(200).json({
+            massage: 'Không có thông tin chi tiết sản phẩm đạt đủ điều kiện cần lấy',
+            data: null
+        })
+    }
+}
+
+let getChiTietSanPhamByIDSanPham = async (req, res) => {
+    var pool = await sql.connect(config);
+    var sqlString = "select * from ChiTietSanPham where IDSanPham = @IDSanPham";
+
+    const rows = await pool.request()
+        .input('IDSanPham', sql.Int, req.body.IDSanPham)
+        .query(sqlString)
+    if (rows.recordset.length > 0) {
+        return res.status(200).json({
+            massage: 'Lấy thông tin chi tiết sản phẩm đạt đủ điều kiện thành công',
+            data: rows.recordset
         })
     }
     else {
@@ -147,4 +168,5 @@ module.exports = {
     deleteChiTietSanPham: deleteChiTietSanPham,
     getMauSacByKichCo: getMauSacByKichCo,
     getChiTietSanPhamByConditionID_MS_KC_SL: getChiTietSanPhamByConditionID_MS_KC_SL,
+    getChiTietSanPhamByIDSanPham: getChiTietSanPhamByIDSanPham,
 }
