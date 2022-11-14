@@ -25,6 +25,8 @@ const initAPIRoute = (app) => {
     router.post('/create-user', APIUserController.createNewNguoiDung);
     router.put('/update-user', APIUserController.updateNguoiDung);
     router.delete('/delete-user/:id', APIUserController.deleteNguoiDung);
+    router.put('/signin', APIUserController.signin);
+    router.put('/signup', APIUserController.signup);
 
     //Loai San Pham
     router.get('/product-type', APILoaiSanPhamController.getAllLoaiSanPhams);
