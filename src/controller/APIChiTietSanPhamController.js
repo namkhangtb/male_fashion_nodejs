@@ -95,6 +95,49 @@ let deleteChiTietSanPham = async (req, res) => {
     })
 }
 
+let getMauSacByKichCo = async (req, res) => {
+    var pool = await sql.connect(config);
+    var sqlString = "select MauSacSP from ChiTietSanPham where KichCoSP = @KichCoSP";
+
+    const rows = await pool.request()
+        .input('KichCoSP', sql.NVarChar, req.body.KichCoSP)
+        .query(sqlString)
+    if (rows.recordset.length > 0) {
+        return res.status(200).json({
+            massage: 'Lấy thông tin danh sách màu sắc thành công',
+            data: rows.recordset
+        })
+    }
+    else {
+        return res.status(200).json({
+            massage: 'Không có thông tin danh sách màu sắc cần lấy',
+            data: null
+        })
+    }
+}
+
+let getChiTietSanPhamByConditionID_MS_KC_SL = async (req, res) => {
+    var pool = await sql.connect(config);
+    var sqlString = "select * from ChiTietSanPham where IDSanPham = @IDSanPham  and KichCoSP = @KichCoSP and MauSacSP = @MauSacSP and SoLuong > 0 ";
+
+    const rows = await pool.request()
+        .input('IDSanPham', sql.Int, req.body.IDSanPham)
+        .input('KichCoSP', sql.NVarChar, req.body.KichCoSP)
+        .input('MauSacSP', sql.NVarChar, req.body.MauSacSP)
+        .query(sqlString)
+    if (rows.recordset.length > 0) {
+        return res.status(200).json({
+            massage: 'Lấy thông tin chi tiết sản phẩm đạt đủ điều thành công',
+            data: rows.recordset[0]
+        })
+    }
+    else {
+        return res.status(200).json({
+            massage: 'Không có thông tin chi tiết sản phẩm đạt đủ điều kiện cần lấy',
+            data: null
+        })
+    }
+}
 
 module.exports = {
     getAllChiTietSanPhams: getAllChiTietSanPhams,
@@ -102,4 +145,6 @@ module.exports = {
     createNewChiTietSanPham: createNewChiTietSanPham,
     updateChiTietSanPham: updateChiTietSanPham,
     deleteChiTietSanPham: deleteChiTietSanPham,
+    getMauSacByKichCo: getMauSacByKichCo,
+    getChiTietSanPhamByConditionID_MS_KC_SL: getChiTietSanPhamByConditionID_MS_KC_SL,
 }

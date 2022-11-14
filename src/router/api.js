@@ -34,6 +34,7 @@ const initAPIRoute = (app) => {
     router.delete('/delete-product-type/:id', APILoaiSanPhamController.deleteLoaiSanPham);
 
     // San Pham
+    router.get('/list-product/:id', APISanPhamController.getListSanPhamByIDLoaiSanPham);
     router.get('/product', APISanPhamController.getAllSanPhams);
     router.get('/product/:id', APISanPhamController.getOneSanPham);
     router.post('/create-product', APISanPhamController.createNewSanPham);
@@ -46,6 +47,8 @@ const initAPIRoute = (app) => {
     router.post('/create-product-details', APIChiTietSanPhamController.createNewChiTietSanPham);
     router.put('/update-product-details', APIChiTietSanPhamController.updateChiTietSanPham);
     router.delete('/delete-product-details/:id', APIChiTietSanPhamController.deleteChiTietSanPham);
+    router.put('/colorbysize', APIChiTietSanPhamController.getMauSacByKichCo);
+    router.put('/product-details-by-condition', APIChiTietSanPhamController.getChiTietSanPhamByConditionID_MS_KC_SL);
 
     //Mau Sac
     router.get('/color', APIMauSacController.getAllMauSacs);
@@ -74,6 +77,7 @@ const initAPIRoute = (app) => {
     router.post('/create-bill-details', APIChiTietHoaDonController.createNewChiTietHoaDon);
     router.put('/update-bill-details', APIChiTietHoaDonController.updateChiTietHoaDon);
     router.delete('/delete-bill-details/:id', APIChiTietHoaDonController.deleteChiTietHoaDon);
+    router.put('/bill-details-byidhoadon', APIChiTietHoaDonController.getListChiTietHoaDonByIDHoaDon);
 
     //Tin Tuc
     router.get('/news', APITinTucController.getAllTinTucs);

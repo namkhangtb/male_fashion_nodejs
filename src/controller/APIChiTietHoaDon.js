@@ -84,6 +84,27 @@ let deleteChiTietHoaDon = async (req, res) => {
     })
 }
 
+let getListChiTietHoaDonByIDHoaDon = async (req, res) => {
+    var pool = await sql.connect(config);
+    var sqlString = "select * from ChiTietHoaDon where IDHoaDon = @IDHoaDon";
+
+    const rows = await pool.request()
+        .input('IDHoaDon', sql.NVarChar, req.body.IDHoaDon)
+        .query(sqlString)
+    if (rows.recordset.length > 0) {
+        return res.status(200).json({
+            massage: 'Lấy thông tin danh sách chi tiết hóa đơn thành công',
+            data: rows.recordset
+        })
+    }
+    else {
+        return res.status(200).json({
+            massage: 'Không có thông tin danh sách chi tiết hóa đơn cần lấy',
+            data: null
+        })
+    }
+}
+
 
 module.exports = {
     getAllChiTietHoaDons: getAllChiTietHoaDons,
@@ -91,4 +112,5 @@ module.exports = {
     createNewChiTietHoaDon: createNewChiTietHoaDon,
     updateChiTietHoaDon: updateChiTietHoaDon,
     deleteChiTietHoaDon: deleteChiTietHoaDon,
+    getListChiTietHoaDonByIDHoaDon: getListChiTietHoaDonByIDHoaDon,
 }
