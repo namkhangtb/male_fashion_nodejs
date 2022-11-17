@@ -9,6 +9,8 @@ var APIChiTietHoaDonController = require('../controller/APIChiTietHoaDon')
 var APITinTucController = require('../controller/APITinTucController')
 var APILienHeController = require('../controller/APILienHeController')
 var APISanPhamController = require('../controller/APISanPhamController')
+var APiSignInUpController = require('../controller/APISignInUpController')
+const verifyToken = require('../middleware/auth')
 
 let router = express.Router();
 var { conn, config } = require('../configs/connectDB')
@@ -19,14 +21,23 @@ var sql = require('mssql/msnodesqlv8');
 const initAPIRoute = (app) => {
     console.log('initAPIRoute')
 
+    router.get('/test', verifyToken, (req, res) => {
+        res.json({
+            message: 'test successful',
+        })
+    });
+    //Dang nhap, dang ky
+    router.put('/signin', APiSignInUpController.signin);
+    router.put('/signup', APiSignInUpController.signup);
+    router.post('/token', APiSignInUpController.remakeAccessToken);
+    router.delete('/logout', verifyToken, APiSignInUpController.logout);
+
     //Nguoi Dung
     router.get('/users', APIUserController.getAllNguoiDungs);
     router.get('/user/:id', APIUserController.getOneNguoiDung);
     router.post('/create-user', APIUserController.createNewNguoiDung);
     router.put('/update-user', APIUserController.updateNguoiDung);
     router.delete('/delete-user/:id', APIUserController.deleteNguoiDung);
-    router.put('/signin', APIUserController.signin);
-    router.put('/signup', APIUserController.signup);
 
     //Loai San Pham
     router.get('/product-type', APILoaiSanPhamController.getAllLoaiSanPhams);
@@ -59,11 +70,12 @@ const initAPIRoute = (app) => {
     router.post('/create-color', APIMauSacController.createNewMauSac);
     router.put('/update-color', APIMauSacController.updateMauSac);
     router.delete('/delete-color/:id', APIMauSacController.deleteMauSac);
+    router.put('/colorbyname', APIMauSacController.getOneMauSacByMauSacSP);
 
     //Kich Co
     router.get('/size', APIKichCoController.getAllKichCos);
     router.get('/size/:id', APIKichCoController.getOneKichCo);
-    router.post('/create-size', APIKichCoController.createNewKichCo);
+    router.post('/create-size', verifyToken, APIKichCoController.createNewKichCo);
     router.put('/update-size', APIKichCoController.updateKichCo);
     router.delete('/delete-size/:id', APIKichCoController.deleteKichCo);
 
