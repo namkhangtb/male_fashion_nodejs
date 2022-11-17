@@ -140,12 +140,11 @@ let getChiTietSanPhamByConditionID_MS_KC_SL = async (req, res) => {
 }
 
 let getChiTietSanPhamByIDSanPham = async (req, res) => {
+    var id = req.params.id;
     var pool = await sql.connect(config);
-    var sqlString = "select * from ChiTietSanPham where IDSanPham = @IDSanPham";
+    var sqlString = "select * from ChiTietSanPham where IDSanPham = " + id;
 
-    const rows = await pool.request()
-        .input('IDSanPham', sql.Int, req.body.IDSanPham)
-        .query(sqlString)
+    const rows = await pool.request().query(sqlString)
     if (rows.recordset.length > 0) {
         return res.status(200).json({
             massage: 'Lấy thông tin chi tiết sản phẩm đạt đủ điều kiện thành công',
