@@ -62,7 +62,7 @@ const initAPIRoute = (app) => {
     router.delete('/delete-product-details/:id', APIChiTietSanPhamController.deleteChiTietSanPham);
     router.put('/colorbysize', APIChiTietSanPhamController.getMauSacByKichCo);
     router.put('/product-details-by-condition', APIChiTietSanPhamController.getChiTietSanPhamByConditionID_MS_KC_SL);
-    router.put('/product-details-by-idsanpham', APIChiTietSanPhamController.getChiTietSanPhamByIDSanPham);
+    router.get('/product-details-by-idsanpham/:id', APIChiTietSanPhamController.getChiTietSanPhamByIDSanPham);
 
     //Mau Sac
     router.get('/color', APIMauSacController.getAllMauSacs);
