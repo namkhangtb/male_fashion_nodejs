@@ -1,8 +1,9 @@
 var { conn, config } = require('../configs/connectDB')
 var sql = require('mssql/msnodesqlv8')
 const bcrypt = require('bcrypt');
-var hashPassword = require('../utils/hashPassword');
-const e = require('express');
+
+require('dotenv').config();
+
 let getAllNguoiDungs = async (req, res) => {
     var pool = await sql.connect(config);
     var sqlString = "select * from NguoiDung"
@@ -87,69 +88,10 @@ let deleteNguoiDung = async (req, res) => {
 
 }
 
-let signin = async (req, res) => {
-    var pool = await sql.connect(config);
-    var sqlString = "select * from NguoiDung where  UserName = @UserName";
-
-    if (!req.body.PassWord && !req.body.UserName) return res.status(401).json({ message: 'Yêu cầu nhập tài khoản và mật khẩu' })
-    if (!req.body.UserName) return res.status(401).json({ message: 'Yêu cầu nhập tài khoản' })
-    if (!req.body.PassWord) return res.status(401).json({ message: 'Yêu cầu nhập mật khẩu' })
-
-    const rows = await pool.request()
-        .input('UserName', sql.NVarChar, req.body.UserName)
-        .query(sqlString)
-
-    const data = rows.recordset[0]
-    console.log(rows)
-    if (data == null) {
-        return res.status(401).json({ message: 'Không tồn tại tài khoản' })
-    }
-    else {
-        const passwordMatch = await hashPassword.matchPassword(rows.recordset[0].PassWord, req.body.PassWord);
-        if (!passwordMatch) return res.status(401).json({ message: 'Sai tài khoản hoặc mật khẩu' })
-        else return res.status(200).json({ message: 'Đăng nhập thành công' })
-    }
-
-}
-
-let signup = async (req, res) => {
-    var pool = await sql.connect(config);
-    var sqlString = "select * from NguoiDung where  UserName = @UserName";
-
-    if (!req.body.PassWord || !req.body.UserName || !req.body.Email) return res.status(401).json({ message: 'Yêu cầu nhập đủ các trường dữ liệu' })
-
-    const rows = await pool.request()
-        .input('UserName', sql.NVarChar, req.body.UserName)
-        .query(sqlString)
-    const data = rows.recordset[0]
-    console.log(rows)
-    if (data != null) {
-        return res.status(401).json({ message: 'Tài khoản đã tồn tại' })
-    }
-    else {
-        var sqlString1 = "insert into NguoiDung(UserName, PassWord, Email) values(@UserName, @PassWord, @Email)"
-
-        let salt = bcrypt.genSaltSync(10)
-        const hashPass = bcrypt.hashSync(req.body.PassWord, salt);
-
-        const rows1 = await pool.request()
-            .input('UserName', sql.NVarChar, req.body.UserName)
-            .input('PassWord', sql.NVarChar, hashPass)
-            .input('Email', sql.NVarChar, req.body.Email)
-            .query(sqlString1)
-        return res.status(200).json({
-            message: 'Đăng ký thành công',
-        })
-    }
-
-}
-
 module.exports = {
     getAllNguoiDungs: getAllNguoiDungs,
     getOneNguoiDung: getOneNguoiDung,
     createNewNguoiDung: createNewNguoiDung,
     updateNguoiDung: updateNguoiDung,
     deleteNguoiDung: deleteNguoiDung,
-    signin: signin,
-    signup: signup,
 }

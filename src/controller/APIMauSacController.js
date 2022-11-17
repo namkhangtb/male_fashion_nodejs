@@ -68,11 +68,32 @@ let deleteMauSac = async (req, res) => {
     })
 }
 
+let getOneMauSacByMauSacSP = async (req, res) => {
+    var pool = await sql.connect(config);
+    var sqlString = "select * from MauSac where MauSacSP = @MauSacSP";
+
+    const rows = await pool.request()
+        .input('MauSacSP', sql.NVarChar, req.body.MauSacSP)
+        .query(sqlString)
+    if (rows.recordset.length > 0) {
+        return res.status(200).json({
+            massage: 'Lấy thông tin một màu sắc sản phẩm thành công',
+            data: rows.recordset[0]
+        })
+    }
+    else {
+        return res.status(200).json({
+            massage: 'Không có thông tin màu sắc sản phẩm cần lấy',
+            data: null
+        })
+    }
+}
+
 module.exports = {
     getAllMauSacs: getAllMauSacs,
     getOneMauSac: getOneMauSac,
     createNewMauSac: createNewMauSac,
     updateMauSac: updateMauSac,
-    deleteMauSac: deleteMauSac
-
+    deleteMauSac: deleteMauSac,
+    getOneMauSacByMauSacSP: getOneMauSacByMauSacSP,
 }
