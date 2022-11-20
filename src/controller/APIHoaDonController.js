@@ -47,9 +47,18 @@ let createNewHoaDon = async (req, res) => {
         .input('NgayGio', sql.DateTime, req.body.NgayGio)
         .input('TongGiaNhap', sql.Decimal, req.body.TongGiaNhap)
         .query(sqlString)
+
+    const timetemp = req.body.NgayGio;
+    var sqlString1 = "select top 1 * from HoaDon where NgayGio = @NgayGio order by IDHoaDon desc";
+    const rows1 = await pool.request()
+        .input('NgayGio', sql.DateTime, timetemp)
+        .query(sqlString1)
+
     return res.status(200).json({
-        message: 'Tạo hóa đơn thành công'
+        message: 'Tạo hóa đơn thành công',
+        data: rows1.recordset[0]
     })
+
 }
 
 
