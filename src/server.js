@@ -4,6 +4,14 @@ var configViewEngine = require('./configs/viewEngine')
 var initAPIRoute = require('./router/api')
 require('dotenv').config();
 
+const https = require('https');
+const fs = require('fs');
+
+const options = {
+    key: fs.readFileSync('src/certificates/key.pem'),
+    cert: fs.readFileSync('src/certificates/cert.pem')
+};
+
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -17,8 +25,17 @@ configViewEngine(app);
 //init web router
 //initWebRoute(app);
 
-initAPIRoute(app);
-
-app.listen(port, () => {
+var httpsServer = https.createServer(options, app);
+httpsServer.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
+
+initAPIRoute(app);
+// app.listen(port, () => {
+//     console.log(`Example app listening at http://localhost:${port}`)
+// })
+
+// https.createServer(options, function (req, res) {
+//     res.writeHead(200);
+//     res.end("hello world\n");
+// }).listen(8000);
