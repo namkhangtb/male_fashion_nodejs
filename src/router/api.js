@@ -85,6 +85,7 @@ const initAPIRoute = (app) => {
     router.post('/create-bill', APIHoaDonController.createNewHoaDon);
     router.put('/update-bill', APIHoaDonController.updateHoaDon);
     router.delete('/delete-bill/:id', APIHoaDonController.deleteHoaDon);
+    router.get('/get-year-hoadon', APIHoaDonController.getYearInTableHoaDon);
 
     //Chi Tiet Hoa Don
     router.get('/bill-details', APIChiTietHoaDonController.getAllChiTietHoaDons);
