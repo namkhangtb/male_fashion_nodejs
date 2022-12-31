@@ -93,6 +93,17 @@ let deleteHoaDon = async (req, res) => {
     })
 }
 
+let getYearInTableHoaDon = async (req, res) => {
+    var pool = await sql.connect(config);
+    var sqlString = "select distinct YEAR(NgayGio) as Year from HoaDon ";
+
+    const rows = await pool.request().query(sqlString)
+    return res.status(200).json({
+        massage: 'Lấy thông tin tất cả các năm có trong hóa đơn thành công',
+        data: rows.recordset
+    })
+}
+
 
 module.exports = {
     getAllHoaDons: getAllHoaDons,
@@ -100,4 +111,5 @@ module.exports = {
     createNewHoaDon: createNewHoaDon,
     updateHoaDon: updateHoaDon,
     deleteHoaDon: deleteHoaDon,
+    getYearInTableHoaDon: getYearInTableHoaDon,
 }
